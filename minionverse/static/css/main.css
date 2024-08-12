@@ -1,0 +1,107 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter.ttf');
+}
+
+body{
+    font-family:'Inter';
+}
+/* .container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+} */
+
+input[id$="-weight"]{
+    max-width: 80%;
+    margin-bottom: 10px;
+}
+
+.table-wrapper{
+    overflow-x: scroll;
+    max-width: 100%;
+}
+/* Apply styles for desktop screens */
+@media only screen and (min-width: 601px) {
+    
+    .table-wrapper {
+      overflow-x: hidden;
+    }
+  }
+/*** 
+# yellow highlight
+#cinemaTable .highlight-column {
+    --bs-table-striped-bg: #ada42e41;
+    --bs-table-bg: #42371a; 
+    color: white; 
+} 
+
+# purple highlight
+#cinemaTable .highlight-column{
+    --bs-table-striped-bg: #6c30bf4f;
+    --bs-table-bg: #2f1845d7;
+    color: white;
+} 
+#cinemaTable .highlight-column{
+    --bs-table-striped-bg: #5e29a748;
+    --bs-table-bg: #2e1843ad;
+    color: white;
+} 
+
+
+# red highlight
+#cinemaTable .highlight-column{
+    --bs-table-striped-bg: #a22b2b4d;
+    --bs-table-bg: #431313;
+    color: white;
+}
+#cinemaTable .highlight-column{
+    --bs-table-striped-bg: #9c28284a;
+    --bs-table-bg: #4b15159f;
+    color: white;
+}
+***/
+#cinemaTable .highlight-column{
+    --bs-table-striped-bg: #9c28284a;
+    --bs-table-bg: #4b15159f;
+    color: white;
+}
+
+#cinemaTable td.highlight-column::after{
+    content: " %";
+}
+/* table and column width settings */
+
+th, td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+    border: 1px solid;
+    border-color: inherit;    
+}
+td[id^="remarks-"]{
+    text-align: left;
+}
+th:not([id^="remarks-"]) {
+    cursor: pointer;
+}
+th:not([id^="remarks-"])::after{
+    content: " \2193\2191";
+}
+th.ascending:not([id^="remarks-"])::after{
+    content: " \2191";
+}
+th.descending:not([id^="remarks-"])::after{
+    content: " \2193";
+}
+th[id^="name-"], td[id^="name-"] {
+    min-width: 150px;
+}
+th[id^="score-"], td[id^="score-"], th[id^="screen-"], td[id^="screen-"], th[id^="projector-"], td[id^="projector-"], th[id^="audio-"], td[id^="audio-"], th[id^="seats-"], td[id^="seats-"], th[id^="surroundings-"], td[id^="surroundings-"], th[id^="travel-"], td[id^="travel-"], th[id^="cost-"], td[id^="cost-"]{
+    min-width: 75px;
+}
+th[id^="remarks-"], td[id^="remarks-"] {
+    min-width: 300px;
+    word-wrap: normal;
+}
+
+

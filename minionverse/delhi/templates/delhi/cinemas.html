@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}
+Delhi Cinemas
+{% endblock title %}
+
+{% block content %}
+<h1>Delhi : Cinemas</h1>
+<hr><br>
+<h4>Select Attributes and their Weights(valid range = [0 to 10] with 0.5 increments) :</h4><br>
+<form method=POST action="{% url 'delhi:cinemas' %}">
+    {% csrf_token %}
+    <div class="row px-3">
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="screen" id="screen" onchange="toggleCheckbox('screen')" checked>
+                <label class="form-check-label" for="screen">Screen</label>
+                <input class="form-control" type="number" id="screen-weight" name="screen-weight" value="10" min="0" max="10" step="0.5">
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="projector" id="projector" onchange="toggleCheckbox('projector')" checked>
+                <label class="form-check-label" for="projector">Projector</label>
+                <input class="form-control" type="number" id="projector-weight" name="projector-weight" value="10" min="0" max="10" step="0.5">
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="audio" id="audio" onchange="toggleCheckbox('audio')" checked>
+                <label class="form-check-label" for="audio">Audio</label>
+                <input class="form-control" type="number" id="audio-weight" name="audio-weight" value="10" min="0" max="10" step="0.5">
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="seats" id="seats" onchange="toggleCheckbox('seats')" checked>
+                <label class="form-check-label" for="seats">Seats</label>
+                <input class="form-control" type="number" id="seats-weight" name="seats-weight" value="10" min="0" max="10" step="0.5">
+            </div>
+        </div>
+    </div>
+    <div class="row px-3">
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="surroundings" id="surroundings" onchange="toggleCheckbox('surroundings')" checked>
+                <label class="form-check-label" for="surroundings">Surroundings</label>
+                <input class="form-control" type="number" id="surroundings-weight" name="surroundings-weight" value="10" min="0" max="10" step="0.5">
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="travel" id="travel" onchange="toggleCheckbox('travel')" checked>
+                <label class="form-check-label" for="travel">Travel</label>
+                <input class="form-control" type="number" id="travel-weight" name="travel-weight" value="0" min="0" max="10" step="0.5">
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="cost" id="cost" onchange="toggleCheckbox('cost')" checked>
+                <label class="form-check-label" for="cost">Cost</label>
+                <input class="form-control" type="number" id="cost-weight" name="cost-weight" value="5" min="0" max="10" step="0.5">
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="form-check checkbox-label-input">
+                <input class="form-check-input" type="checkbox" name="column" value="remarks" id="remarks" onchange="toggleCheckbox('remarks')" checked>
+                <label class="form-check-label" for="remarks">Remarks</label>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button type="button" class="mt-3 btn btn-primary" onclick="calculateCinemaRatings()">Calculate Ratings</button>
+    </div>
+</form>
+<hr><br>
+<div class="table-wrapper">
+<table id="cinemaTable" class="table table-dark table-striped mt-3">
+    <thead>
+        <tr>
+            <th id="score-header" class="highlight-column" onclick="sortTable(0)">Weighted Score</th>
+            <th id="name-header" onclick="sortTable(1)">Name</th>
+            <th id="screen-header" onclick="sortTable(2)">Screen</th>
+            <th id="projector-header" onclick="sortTable(3)">Projector</th>
+            <th id="audio-header" onclick="sortTable(4)">Audio</th>
+            <th id="seats-header" onclick="sortTable(5)">Seats</th>
+            <th id="surroundings-header" onclick="sortTable(6)">Surroundings</th>
+            <th id="travel-header" onclick="sortTable(7)">Travel</th>
+            <th id="cost-header" onclick="sortTable(8)">Cost</th>
+            <th id="remarks-header">Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cinema in cinemas %}
+            <tr>
+                <td class="weighted-sum highlight-column" id="score-{{ cinema.pk }}"></td> <!-- Placeholder for Weighted Sum -->
+                <td id="name-{{ cinema.pk }}">{{ cinema.name }}</td>
+                <td id="screen-{{ cinema.pk }}">{{ cinema.screen }}</td>
+                <td id="projector-{{ cinema.pk }}">{{ cinema.projector }}</td>
+                <td id="audio-{{ cinema.pk }}">{{ cinema.audio }}</td>
+                <td id="seats-{{ cinema.pk }}">{{ cinema.seats }}</td>
+                <td id="surroundings-{{ cinema.pk }}">{{ cinema.surroundings }}</td>
+                <td id="travel-{{ cinema.pk }}">{{ cinema.travel }}</td>
+                <td id="cost-{{ cinema.pk }}">{{ cinema.cost }}</td>
+                <td id="remarks-{{ cinema.pk }}">{{ cinema.remarks|linebreaks }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+
+<script>
+    function calculateCinemaRatings() {
+        const table = document.getElementById('cinemaTable');
+        const rows = table.querySelectorAll('tbody tr');
+    
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            let weightedSum = 0;
+            let maxWeightedSum = 0;
+            let totalWeight = 0;            
+    
+            cells.forEach(cell => {
+                const columnId = cell.id.split('-')[0];
+                const checkbox = document.getElementById(columnId);
+                const weight = document.getElementById(columnId + '-weight');
+    
+                if (checkbox && checkbox.checked && weight) {
+                    const value = parseFloat(cell.innerText.trim());
+                    const weightValue = parseFloat(weight.value.trim());
+    
+                    if (!isNaN(value) && !isNaN(weightValue)) {
+                        weightedSum += value * weightValue;
+                        maxWeightedSum += 10 * weightValue;
+                        totalWeight += weightValue;
+                    }
+                }
+            });
+    
+            if (totalWeight !== 0) {
+                const weightedSumCell = row.querySelector('.weighted-sum');
+                // Scale the weighted sum to be out of 10
+                const scaledSum = (weightedSum / maxWeightedSum) * 100;
+                weightedSumCell.innerText = scaledSum.toFixed(2);
+            }
+        });
+        if (document.getElementById('score-header').classList.contains('descending') || document.getElementById('score-header').classList.contains('ascending')) {
+            sortTable(0);
+            sortTable(0);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        calculateCinemaRatings(); // Calculate ratings on page load
+        sortTable(0);
+    });
+    document.addEventListener('focusout', function (event) {
+        if (event.target.type === 'number') {
+            const step = parseFloat(event.target.getAttribute('step')) || 1;
+            const min = parseFloat(event.target.getAttribute('min')) || 0;
+            const max = parseFloat(event.target.getAttribute('max')) || Number.MAX_VALUE;
+    
+            let value = parseFloat(event.target.value);
+            if (isNaN(value)) value = 0;
+    
+            if (value < min) {
+                event.target.value = min;
+            } else if (value > max) {
+                event.target.value = max;
+            } else {
+                event.target.value = (Math.round(value / step) * step).toFixed(step.toString().split('.')[1]?.length || 0);
+            }
+        }
+    }, true);
+    function toggleCheckbox(columnId) {
+        const checkbox = document.getElementById(columnId);
+        const weight = document.getElementById(columnId + "-weight");
+        if (!checkbox.checked) {
+            if (weight) {
+                weight.style.display = 'none';
+            }
+            toggleColumnOff(columnId);
+        } else {
+            if (weight) {
+                weight.style.display = 'block';
+            }
+            toggleColumnOn(columnId);
+        }
+    }
+    function toggleColumnOff(columnPrefix) {
+        const headerCell = document.getElementById(columnPrefix + '-header');
+        if (headerCell) {
+            headerCell.style.display = 'none';
+        }
+    
+        const table = document.getElementById('cinemaTable');
+        const rows = table.rows;
+        
+        for (let i = 1; i < rows.length; i++) {
+            const cell = document.getElementById(columnPrefix + '-' + rows[i].cells[0].id.split('-')[1]);
+            if (cell) {
+                cell.style.display = 'none';
+            }
+        }
+    }
+    function toggleColumnOn(columnPrefix) {
+        const headerCell = document.getElementById(columnPrefix + '-header');
+        if (headerCell) {
+            headerCell.style.display = '';
+        }
+    
+        const table = document.getElementById('cinemaTable');
+        const rows = table.rows;
+        
+        for (let i = 1; i < rows.length; i++) {
+            const cell = document.getElementById(columnPrefix + '-' + rows[i].cells[0].id.split('-')[1]);
+            if (cell) {
+                cell.style.display = '';
+            }
+        }
+    }
+    function sortTable(colIndex) {
+        const table = document.getElementById('cinemaTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        const th = table.querySelector(`thead th:nth-child(${colIndex + 1})`);
+        const isDescending = th.classList.contains('ascending') || (!th.classList.contains('descending') && !th.classList.contains('ascending'));
+        
+        // Clear previous sort classes
+        Array.from(table.querySelectorAll('thead th')).forEach(th => {
+            th.classList.remove('ascending', 'descending');
+        });
+
+        rows.sort((a, b) => {
+            let aValue = a.cells[colIndex].innerText.trim();
+            let bValue = b.cells[colIndex].innerText.trim();
+
+            if (!isNaN(aValue) && !isNaN(bValue)) {
+                aValue = parseFloat(aValue);
+                bValue = parseFloat(bValue);
+            }
+
+            if (aValue === bValue) return 0;
+
+            if (isDescending) {
+                return aValue < bValue ? 1 : -1;
+            } else {
+                return aValue > bValue ? 1 : -1;
+            }
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+
+        // Toggle sort direction class
+        th.classList.toggle('descending', isDescending);
+        th.classList.toggle('ascending', !isDescending);
+    }
+</script>
+
+{% endblock content %}
